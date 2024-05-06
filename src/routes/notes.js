@@ -1,12 +1,10 @@
 import express from "express";
-import { createNotes } from "../controllers/notes.js";
+import { createNotes, getAllNotes } from "../controllers/notes.js";
 import { filterOutEmptyProperties } from "../middlewares/filterOutEmptyProperties.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("Get all todos");
-});
+router.get("/", getAllNotes);
 
 router.post("/", filterOutEmptyProperties, createNotes);
 

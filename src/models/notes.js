@@ -17,3 +17,8 @@ export const createNewNoteModel = async (payload) => {
   const newNote = new Notes(payload);
   return await newNote.save();
 };
+
+export const getAllNotesModel = async () => {
+  const notes = await Notes.find({});
+  return notes;
+};
