@@ -1,4 +1,6 @@
 import express from "express";
+import { createNotes } from "../controllers/notes.js";
+import { filterOutEmptyProperties } from "../middlewares/filterOutEmptyProperties.js";
 
 const router = express.Router();
 
@@ -6,9 +8,7 @@ router.get("/", (req, res) => {
   res.send("Get all todos");
 });
 
-router.post("/", (req, res) => {
-  res.send("Create new note");
-});
+router.post("/", filterOutEmptyProperties, createNotes);
 
 router.put("/:id", (req, res) => {
   res.send("Update post selected by id");

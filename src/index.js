@@ -8,15 +8,15 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(express.json());
+
+connectToDB();
 
 app.use(
   cors({
     origin: "*",
   })
 );
-
-connectToDB();
-
 app.use(indexRouter);
 
 app.listen(PORT, () => {
