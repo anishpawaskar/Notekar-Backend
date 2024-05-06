@@ -60,3 +60,21 @@ export const findNoteByIdAndUpdateModel = async (filter, value) => {
     throw err;
   }
 };
+
+export const findNoteByIdAndDeleteModel = async (filter) => {
+  try {
+    const deletedNote = await Notes.findOneAndDelete(filter);
+
+    if (!deletedNote) {
+      return null;
+    }
+
+    return deletedNote;
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      throw new Error("Item not found");
+    }
+
+    throw err;
+  }
+};
