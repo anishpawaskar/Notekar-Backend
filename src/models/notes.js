@@ -23,11 +23,33 @@ export const getAllNotesModel = async () => {
   return notes;
 };
 
+export const getNoteModel = async (filter) => {
+  try {
+    const note = await Notes.findById(filter);
+
+    if (!note) {
+      return null;
+    }
+
+    return note;
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      throw new Error("Item not found");
+    }
+
+    throw err;
+  }
+};
+
 export const findNoteByIdAndUpdateModel = async (filter, value) => {
   try {
     const updatedNote = await Notes.findByIdAndUpdate(filter, value, {
       new: true,
     });
+
+    if (!updatedNote) {
+      return null;
+    }
 
     return await updatedNote.save();
   } catch (err) {

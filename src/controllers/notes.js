@@ -2,6 +2,7 @@ import {
   createNewNoteModel,
   findNoteByIdAndUpdateModel,
   getAllNotesModel,
+  getNoteModel,
 } from "../models/notes.js";
 
 export const createNotes = async (req, res) => {
@@ -28,6 +29,29 @@ export const getAllNotes = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
+    return res.status(500).json("Internal server error!");
+  }
+};
+
+export const getNote = async (req, res) => {
+  try {
+    const noteId = req.params.id;
+    const note = await getNoteModel({ _id: noteId });
+
+    if (!note) {
+      return res.status(404).json({ message: "Note not found." });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Note returned successfully.", note });
+  } catch (err) {
+    console.error(err);
+
+    if (err.message === "Item not found") {
+      return res.status(404).json({ message: "Note not found." });
+    }
+
     return res.status(500).json("Internal server error!");
   }
 };
