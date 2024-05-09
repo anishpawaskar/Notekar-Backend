@@ -21,6 +21,12 @@ app.use(
 );
 app.use(indexRouter);
 
+app.use((err, req, res, next) => {
+  if (err) {
+    return res.status(500).json({ message: "Currently server is down" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on PORT: ${PORT}`);
 });
