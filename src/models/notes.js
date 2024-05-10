@@ -5,7 +5,7 @@ const NotesSchema = new mongoose.Schema(
     title: String,
     description: String,
     theme: {
-      bacbackgroundColor: String,
+      backgroundColor: String,
     },
     states: {
       isArchived: Boolean,
