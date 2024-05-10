@@ -5,7 +5,7 @@ const NotesSchema = new mongoose.Schema(
     title: String,
     description: String,
     states: {
-      isDeleted: Boolean,
+      isArchived: Boolean,
     },
   },
   { timestamps: true }
