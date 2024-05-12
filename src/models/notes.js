@@ -6,6 +6,7 @@ const NotesSchema = new mongoose.Schema(
     description: String,
     theme: {
       backgroundColor: String,
+      hoverBackgroundColor: String,
     },
     states: {
       isArchived: Boolean,
