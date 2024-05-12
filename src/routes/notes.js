@@ -13,7 +13,7 @@ const router = express.Router();
 router.get("/", getAllNotes);
 router.get("/:id", getNote);
 router.post("/", filterOutEmptyProperties, createNotes);
-router.put("/:id", filterOutEmptyProperties, updateNote);
+router.put("/:id", updateNote);
 router.delete("/:id", deleteNote);
 
 export default router;
