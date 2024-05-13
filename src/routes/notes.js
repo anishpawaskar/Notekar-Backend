@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/", getAllNotes);
 router.get("/:id", getNote);
-router.post("/", filterOutEmptyProperties, createNotes);
+router.post("/", createNotes);
 router.put("/:id", updateNote);
 router.delete("/:id", deleteNote);
 
