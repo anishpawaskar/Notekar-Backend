@@ -19,5 +19,39 @@ export const getLabelsModel = async () => {
 };
 
 export const getLabelModel = async (body) => {
-  return await Labels.findOne(body);
+  try {
+    const label = await Labels.findOne(body);
+
+    if (!label) {
+      return null;
+    }
+
+    return label;
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      throw new Error("Item not found");
+    }
+
+    throw err;
+  }
+};
+
+export const findLabelByIdAndUpdateModel = async (filter, body) => {
+  try {
+    const updateLabel = await Labels.findByIdAndUpdate(filter, body, {
+      new: true,
+    });
+
+    if (!updateLabel) {
+      return null;
+    }
+
+    return await updateLabel.save();
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      throw new Error("Item not found");
+    }
+
+    throw err;
+  }
 };

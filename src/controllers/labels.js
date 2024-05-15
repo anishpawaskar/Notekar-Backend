@@ -1,5 +1,6 @@
 import {
   createNewLabelModel,
+  findLabelByIdAndUpdateModel,
   getLabelModel,
   getLabelsModel,
 } from "../models/labels.js";
@@ -37,5 +38,28 @@ export const getLabels = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error while fetching request." });
+  }
+};
+
+export const updteLabel = async (req, res) => {
+  try {
+    const labelId = req.params.id;
+    const { name } = req.body;
+
+    const updatedLabel = await findLabelByIdAndUpdateModel(
+      { _id: labelId },
+      { name }
+    );
+
+    if (!updatedLabel) {
+      return res.status(404).json({ message: "Label not found." });
+    }
+
+    return res
+      .status(201)
+      .json({ message: "Label updated successfully.", label: updatedLabel });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error while updating request." });
   }
 };
