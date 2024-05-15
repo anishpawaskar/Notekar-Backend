@@ -1,5 +1,6 @@
 import {
   createNewLabelModel,
+  findLabelByIdAndDeleteModel,
   findLabelByIdAndUpdateModel,
   getLabelModel,
   getLabelsModel,
@@ -61,5 +62,23 @@ export const updteLabel = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error while updating request." });
+  }
+};
+
+export const deleteLabel = async (req, res) => {
+  try {
+    const labelId = req.params.id;
+    const deletedNote = await findLabelByIdAndDeleteModel({ _id: labelId });
+
+    if (!deletedNote) {
+      return res.status(404).json({ message: "Label not found." });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Label deleted successfully.", label: deletedNote._id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error while deleting request." });
   }
 };

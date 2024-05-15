@@ -55,3 +55,21 @@ export const findLabelByIdAndUpdateModel = async (filter, body) => {
     throw err;
   }
 };
+
+export const findLabelByIdAndDeleteModel = async (filter) => {
+  try {
+    const deleteLabel = await Labels.findByIdAndDelete(filter);
+
+    if (!deleteLabel) {
+      return null;
+    }
+
+    return deleteLabel;
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      throw new Error("Item not found");
+    }
+
+    throw err;
+  }
+};
