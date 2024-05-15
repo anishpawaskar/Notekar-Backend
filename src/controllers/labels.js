@@ -1,6 +1,10 @@
-import { createNewLabelModel, getLabelModel } from "../models/labels.js";
+import {
+  createNewLabelModel,
+  getLabelModel,
+  getLabelsModel,
+} from "../models/labels.js";
 
-export const createLabels = async (req, res) => {
+export const createLabel = async (req, res) => {
   try {
     const { name } = req.body;
     const label = await getLabelModel({ name: req.body.name });
@@ -21,5 +25,17 @@ export const createLabels = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error while creating request." });
+  }
+};
+
+export const getLabels = async (req, res) => {
+  try {
+    const labels = await getLabelsModel();
+    return res
+      .status(200)
+      .json({ message: "Labels returnd successfully.", labels });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error while fetching request." });
   }
 };
