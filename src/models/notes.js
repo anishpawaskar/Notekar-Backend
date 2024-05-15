@@ -4,6 +4,7 @@ const NotesSchema = new mongoose.Schema(
   {
     title: String,
     description: String,
+    imageUrl: String,
     theme: {
       backgroundColor: String,
       hoverBackgroundColor: String,
