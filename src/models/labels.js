@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const LabelsSchema = new mongoose.Schema(
   {
-    name: String,
+    name: { type: String, unique: true },
   },
   { timestamps: true }
 );
@@ -15,12 +15,18 @@ export const createNewLabelModel = async (payload) => {
 };
 
 export const getLabelsModel = async () => {
-  return await Labels.find({});
+  return await Labels.find({})
+    .sort({ name: 1 })
+    .collation({ locale: "en", strength: 1 })
+    .exec();
 };
 
 export const getLabelModel = async (body) => {
   try {
-    const label = await Labels.findOne(body);
+    const label = await Labels.findOne(body).collation({
+      locale: "en",
+      strength: 2,
+    });
 
     if (!label) {
       return null;
