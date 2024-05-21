@@ -104,3 +104,27 @@ export const findNoteByIdAndDeleteModel = async (filter) => {
     throw err;
   }
 };
+
+export const findNoteByIdAndWithUniqueLabels = async (
+  noteId,
+  appliedLabels
+) => {
+  try {
+    const note = await Notes.findOne({
+      _id: noteId,
+      labels: { $all: appliedLabels },
+    });
+
+    if (!note) {
+      return null;
+    }
+
+    return note;
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      throw new Error("Item not found");
+    }
+
+    throw err;
+  }
+};

@@ -2,6 +2,7 @@ import {
   createNewNoteModel,
   findNoteByIdAndDeleteModel,
   findNoteByIdAndUpdateModel,
+  findNoteByIdAndWithUniqueLabels,
   getAllNotesModel,
   getNoteModel,
 } from "../models/notes.js";
@@ -60,7 +61,19 @@ export const getNote = async (req, res) => {
 export const updateNote = async (req, res) => {
   try {
     const noteId = req.params.id;
+    const appliedLabels = req.body.appliedLabels;
     const body = req.body;
+
+    if (appliedLabels.length > 0) {
+      const noteWithUniqueLabel = await findNoteByIdAndWithUniqueLabels(
+        noteId,
+        appliedLabels
+      );
+
+      if (noteWithUniqueLabel) {
+        return res.status(400).json({ message: "Labels already exists." });
+      }
+    }
 
     const updatedNote = await findNoteByIdAndUpdateModel({ _id: noteId }, body);
 
