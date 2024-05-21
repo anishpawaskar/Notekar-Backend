@@ -12,6 +12,12 @@ const NotesSchema = new mongoose.Schema(
     states: {
       isArchived: Boolean,
     },
+    labels: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Labels",
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -48,9 +54,24 @@ export const getNoteModel = async (filter) => {
 
 export const findNoteByIdAndUpdateModel = async (filter, value) => {
   try {
-    const updatedNote = await Notes.findByIdAndUpdate(filter, value, {
-      new: true,
-    });
+    const appliedLabels = value.appliedLabels;
+    let updatedNote;
+    if (appliedLabels.length > 0) {
+      updatedNote = await Notes.findByIdAndUpdate(
+        filter,
+        {
+          $push: { labels: { $each: appliedLabels } },
+          ...value,
+        },
+        {
+          new: true,
+        }
+      );
+    } else {
+      updatedNote = await Notes.findByIdAndUpdate(filter, value, {
+        new: true,
+      });
+    }
 
     if (!updatedNote) {
       return null;
