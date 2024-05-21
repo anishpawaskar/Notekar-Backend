@@ -54,18 +54,49 @@ export const getNoteModel = async (filter) => {
 
 export const findNoteByIdAndUpdateModel = async (filter, value) => {
   try {
-    const appliedLabels = value.appliedLabels;
+    const labelsToAdd = value.labelsToAdd;
+    const labelsToDelete = value.labelsToDelete;
     let updatedNote;
-    if (appliedLabels.length > 0) {
+
+    if (labelsToAdd?.length > 0 && labelsToDelete?.length > 0) {
+      //this will add labels in note
       updatedNote = await Notes.findByIdAndUpdate(
         filter,
         {
-          $push: { labels: { $each: appliedLabels } },
+          $push: { labels: { $each: labelsToAdd } },
+          ...value,
+        },
+        { new: true }
+      );
+
+      //this will delete labels from note
+      updatedNote = await Notes.findByIdAndUpdate(
+        filter,
+        {
+          $pull: { labels: { $in: labelsToDelete } },
+          ...value,
+        },
+        { new: true }
+      );
+    } else if (labelsToAdd?.length > 0) {
+      updatedNote = await Notes.findByIdAndUpdate(
+        filter,
+        {
+          $push: { labels: { $each: labelsToAdd } },
           ...value,
         },
         {
           new: true,
         }
+      );
+    } else if (labelsToDelete?.length > 0) {
+      updatedNote = await Notes.findByIdAndUpdate(
+        filter,
+        {
+          $pull: { labels: { $in: labelsToDelete } },
+          ...value,
+        },
+        { new: true }
       );
     } else {
       updatedNote = await Notes.findByIdAndUpdate(filter, value, {
@@ -105,14 +136,11 @@ export const findNoteByIdAndDeleteModel = async (filter) => {
   }
 };
 
-export const findNoteByIdAndWithUniqueLabels = async (
-  noteId,
-  appliedLabels
-) => {
+export const findNoteByIdAndWithUniqueLabels = async (noteId, labels) => {
   try {
     const note = await Notes.findOne({
       _id: noteId,
-      labels: { $all: appliedLabels },
+      labels: { $all: labels },
     });
 
     if (!note) {
