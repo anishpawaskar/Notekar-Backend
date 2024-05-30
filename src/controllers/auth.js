@@ -1,8 +1,9 @@
 import { createNewUserModel, getUserByEmailModel } from "../models/users.js";
+import { generateHashPassword, generateJwt } from "../utils/auth.js";
 
 export const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, ...rest } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     const existingEmail = await getUserByEmailModel(email);
     if (existingEmail) {
@@ -13,12 +14,18 @@ export const registerUser = async (req, res) => {
       firstName,
       lastName,
       email,
-      password,
-      ...rest,
+      hashPassword: await generateHashPassword(password),
     });
 
     if (newUser) {
-      return res.status(201).json({ message: "User register successfully." });
+      const user = { firstName, lastName, email };
+      const token = generateJwt(user);
+      console.log("token", token);
+      res.cookie(process.env.COOKIE_NAME, token, { httpOnly: true });
+
+      return res
+        .status(201)
+        .json({ message: "User register successfully.", user });
     }
   } catch (err) {
     console.error(err);
