@@ -24,7 +24,8 @@ export const createNotes = async (req, res) => {
 
 export const getAllNotes = async (req, res) => {
   try {
-    const notes = await getAllNotesModel();
+    const { id: userId } = req.userData;
+    const notes = await getAllNotesModel({ userId });
     if (notes) {
       return res
         .status(200)

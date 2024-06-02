@@ -30,8 +30,8 @@ export const createNewNoteModel = async (payload) => {
   return await newNote.save();
 };
 
-export const getAllNotesModel = async () => {
-  const notes = await Notes.find({}).populate("labels");
+export const getAllNotesModel = async (filter) => {
+  const notes = await Notes.find(filter).populate("labels");
 
   return notes;
 };
