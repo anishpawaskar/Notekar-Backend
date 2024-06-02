@@ -1,4 +1,4 @@
-import { getUserById } from "../models/users.js";
+import { findUserByIdAndUpdateModel, getUserById } from "../models/users.js";
 
 export const getSelfDetails = async (req, res) => {
   try {
@@ -32,5 +32,23 @@ export const getSelfDetails = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Error while getting self details." });
+  }
+};
+
+export const updateSelfDetails = async (req, res) => {
+  try {
+    const body = req.body;
+    const { id } = req.userData;
+    const updateUser = await findUserByIdAndUpdateModel({ _id: id }, body);
+
+    return res.status(201).json({
+      message: "User details updated successfully.",
+      id: updateUser._id,
+    });
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(500)
+      .json({ message: "Error while updating self details." });
   }
 };

@@ -36,3 +36,23 @@ export const getUserById = async (id) => {
     throw err;
   }
 };
+
+export const findUserByIdAndUpdateModel = async (id, payload) => {
+  try {
+    const updatedUserData = await Users.findByIdAndUpdate(id, payload, {
+      new: true,
+    });
+
+    if (!updatedUserData) {
+      return null;
+    }
+
+    return updatedUserData;
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      throw new Error("Item not found");
+    }
+
+    throw err;
+  }
+};
