@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const LabelsSchema = new mongoose.Schema(
   {
+    userId: String,
     name: { type: String, unique: true },
   },
   { timestamps: true }

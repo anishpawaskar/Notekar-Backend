@@ -8,8 +8,9 @@ import {
 
 export const createLabel = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const { name } = req.body;
-    const label = await getLabelModel({ name: name });
+    const label = await getLabelModel({ name: name, userId });
 
     if (label) {
       return res.status(400).json({ message: "Label already exists" });
@@ -17,6 +18,7 @@ export const createLabel = async (req, res) => {
 
     const newLabel = await createNewLabelModel({
       name,
+      userId,
     });
 
     if (newLabel) {
