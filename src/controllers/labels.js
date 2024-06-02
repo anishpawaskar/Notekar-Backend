@@ -47,11 +47,12 @@ export const getLabels = async (req, res) => {
 
 export const updteLabel = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const labelId = req.params.id;
     const { name } = req.body;
 
     const updatedLabel = await findLabelByIdAndUpdateModel(
-      { _id: labelId },
+      { _id: labelId, userId },
       { name }
     );
 
