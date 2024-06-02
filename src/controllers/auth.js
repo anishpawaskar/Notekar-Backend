@@ -24,7 +24,6 @@ export const registerUser = async (req, res) => {
     if (newUser) {
       const user = { id: newUser._id, firstName, lastName, email };
       const token = generateJwt(user);
-      console.log("token", token);
       res.cookie(process.env.COOKIE_NAME, token, { httpOnly: true });
 
       return res.status(201).json({
@@ -68,7 +67,6 @@ export const loginUser = async (req, res) => {
     };
 
     const token = generateJwt(payload);
-    console.log("token", token);
     res.cookie(process.env.COOKIE_NAME, token, { httpOnly: true });
 
     if (user.pictureUrl) {
