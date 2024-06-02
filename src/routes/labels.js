@@ -9,7 +9,7 @@ import { verifyJwt } from "../utils/auth.js";
 
 const router = express.Router();
 
-router.get("/", getLabels);
+router.get("/", verifyJwt, getLabels);
 router.post("/", verifyJwt, createLabel);
 router.put("/:id", updteLabel);
 router.delete("/:id", deleteLabel);

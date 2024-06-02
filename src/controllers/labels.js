@@ -34,7 +34,8 @@ export const createLabel = async (req, res) => {
 
 export const getLabels = async (req, res) => {
   try {
-    const labels = await getLabelsModel();
+    const { id: userId } = req.userData;
+    const labels = await getLabelsModel({ userId });
     return res
       .status(200)
       .json({ message: "Labels returnd successfully.", labels });
