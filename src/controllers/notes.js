@@ -25,11 +25,17 @@ export const createNotes = async (req, res) => {
 export const getAllNotes = async (req, res) => {
   try {
     const { id: userId } = req.userData;
-    const notes = await getAllNotesModel({ userId });
-    if (notes) {
+    if (userId) {
+      const notes = await getAllNotesModel({ userId });
+      if (notes) {
+        return res
+          .status(200)
+          .json({ message: "Notes returned successfully.", notes });
+      }
+    } else {
       return res
         .status(200)
-        .json({ message: "Notes returned successfully.", notes });
+        .json({ message: "Notes returned successfully.", notes: [] });
     }
   } catch (err) {
     console.error(err);
