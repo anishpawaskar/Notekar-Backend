@@ -9,8 +9,9 @@ import {
 
 export const createNotes = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const payload = req.body;
-    const note = await createNewNoteModel(payload);
+    const note = await createNewNoteModel({ userId, ...payload });
 
     if (note) {
       return res.status(201).json({ message: "New note created.", note });
@@ -23,7 +24,8 @@ export const createNotes = async (req, res) => {
 
 export const getAllNotes = async (req, res) => {
   try {
-    const notes = await getAllNotesModel();
+    const { id: userId } = req.userData;
+    const notes = await getAllNotesModel({ userId });
     if (notes) {
       return res
         .status(200)
@@ -37,8 +39,9 @@ export const getAllNotes = async (req, res) => {
 
 export const getNote = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const noteId = req.params.id;
-    const note = await getNoteModel({ _id: noteId });
+    const note = await getNoteModel({ _id: noteId, userId });
 
     if (!note) {
       return res.status(404).json({ message: "Note not found." });
@@ -60,6 +63,7 @@ export const getNote = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const noteId = req.params.id;
     const labelsToAdd = req.body.labelsToAdd;
     const labelsToDelete = req.body.labelsToDelete;
@@ -69,7 +73,8 @@ export const updateNote = async (req, res) => {
       if (labelsToAdd.length > 0) {
         const noteWithUniqueLabel = await findNoteByIdAndWithUniqueLabels(
           noteId,
-          labelsToAdd
+          labelsToAdd,
+          userId
         );
 
         if (noteWithUniqueLabel) {
@@ -82,7 +87,8 @@ export const updateNote = async (req, res) => {
       if (labelsToDelete.length > 0) {
         const noteWithLabelForDeletion = await findNoteByIdAndWithUniqueLabels(
           noteId,
-          labelsToDelete
+          labelsToDelete,
+          userId
         );
 
         if (!noteWithLabelForDeletion) {
@@ -93,7 +99,10 @@ export const updateNote = async (req, res) => {
       }
     }
 
-    const updatedNote = await findNoteByIdAndUpdateModel({ _id: noteId }, body);
+    const updatedNote = await findNoteByIdAndUpdateModel(
+      { _id: noteId, userId },
+      body
+    );
 
     if (!updatedNote) {
       return res.status(404).json({ message: "Note not found." });
@@ -115,8 +124,12 @@ export const updateNote = async (req, res) => {
 
 export const deleteNote = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const noteId = req.params.id;
-    const deletedNote = await findNoteByIdAndDeleteModel({ _id: noteId });
+    const deletedNote = await findNoteByIdAndDeleteModel({
+      _id: noteId,
+      userId,
+    });
 
     if (!deletedNote) {
       return res.status(404).json({ message: "Note not found." });

@@ -6,14 +6,14 @@ import {
   getNote,
   updateNote,
 } from "../controllers/notes.js";
-import { filterOutEmptyProperties } from "../middlewares/filterOutEmptyProperties.js";
+import { verifyJwt } from "../utils/auth.js";
 
 const router = express.Router();
 
-router.get("/", getAllNotes);
-router.get("/:id", getNote);
-router.post("/", createNotes);
-router.put("/:id", updateNote);
-router.delete("/:id", deleteNote);
+router.get("/", verifyJwt, getAllNotes);
+router.get("/:id", verifyJwt, getNote);
+router.post("/", verifyJwt, createNotes);
+router.put("/:id", verifyJwt, updateNote);
+router.delete("/:id", verifyJwt, deleteNote);
 
 export default router;

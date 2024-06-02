@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const LabelsSchema = new mongoose.Schema(
   {
+    userId: String,
     name: { type: String, unique: true },
   },
   { timestamps: true }
@@ -14,8 +15,8 @@ export const createNewLabelModel = async (payload) => {
   return await newLabel.save();
 };
 
-export const getLabelsModel = async () => {
-  return await Labels.find({})
+export const getLabelsModel = async (filter) => {
+  return await Labels.find(filter)
     .sort({ name: 1 })
     .collation({ locale: "en", strength: 1 })
     .exec();

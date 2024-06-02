@@ -8,8 +8,9 @@ import {
 
 export const createLabel = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const { name } = req.body;
-    const label = await getLabelModel({ name: name });
+    const label = await getLabelModel({ name: name, userId });
 
     if (label) {
       return res.status(400).json({ message: "Label already exists" });
@@ -17,6 +18,7 @@ export const createLabel = async (req, res) => {
 
     const newLabel = await createNewLabelModel({
       name,
+      userId,
     });
 
     if (newLabel) {
@@ -32,7 +34,8 @@ export const createLabel = async (req, res) => {
 
 export const getLabels = async (req, res) => {
   try {
-    const labels = await getLabelsModel();
+    const { id: userId } = req.userData;
+    const labels = await getLabelsModel({ userId });
     return res
       .status(200)
       .json({ message: "Labels returnd successfully.", labels });
@@ -44,11 +47,12 @@ export const getLabels = async (req, res) => {
 
 export const updteLabel = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const labelId = req.params.id;
     const { name } = req.body;
 
     const updatedLabel = await findLabelByIdAndUpdateModel(
-      { _id: labelId },
+      { _id: labelId, userId },
       { name }
     );
 
@@ -67,8 +71,12 @@ export const updteLabel = async (req, res) => {
 
 export const deleteLabel = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const labelId = req.params.id;
-    const deletedNote = await findLabelByIdAndDeleteModel({ _id: labelId });
+    const deletedNote = await findLabelByIdAndDeleteModel({
+      _id: labelId,
+      userId,
+    });
 
     if (!deletedNote) {
       return res.status(404).json({ message: "Label not found." });
