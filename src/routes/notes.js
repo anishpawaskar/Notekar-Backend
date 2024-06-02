@@ -13,7 +13,7 @@ const router = express.Router();
 router.get("/", verifyJwt, getAllNotes);
 router.get("/:id", verifyJwt, getNote);
 router.post("/", verifyJwt, createNotes);
-router.put("/:id", updateNote);
+router.put("/:id", verifyJwt, updateNote);
 router.delete("/:id", deleteNote);
 
 export default router;

@@ -63,6 +63,7 @@ export const getNote = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const noteId = req.params.id;
     const labelsToAdd = req.body.labelsToAdd;
     const labelsToDelete = req.body.labelsToDelete;
@@ -72,7 +73,8 @@ export const updateNote = async (req, res) => {
       if (labelsToAdd.length > 0) {
         const noteWithUniqueLabel = await findNoteByIdAndWithUniqueLabels(
           noteId,
-          labelsToAdd
+          labelsToAdd,
+          userId
         );
 
         if (noteWithUniqueLabel) {
@@ -85,7 +87,8 @@ export const updateNote = async (req, res) => {
       if (labelsToDelete.length > 0) {
         const noteWithLabelForDeletion = await findNoteByIdAndWithUniqueLabels(
           noteId,
-          labelsToDelete
+          labelsToDelete,
+          userId
         );
 
         if (!noteWithLabelForDeletion) {
@@ -96,7 +99,10 @@ export const updateNote = async (req, res) => {
       }
     }
 
-    const updatedNote = await findNoteByIdAndUpdateModel({ _id: noteId }, body);
+    const updatedNote = await findNoteByIdAndUpdateModel(
+      { _id: noteId, userId },
+      body
+    );
 
     if (!updatedNote) {
       return res.status(404).json({ message: "Note not found." });
