@@ -11,7 +11,7 @@ import { verifyJwt } from "../utils/auth.js";
 const router = express.Router();
 
 router.get("/", verifyJwt, getAllNotes);
-router.get("/:id", getNote);
+router.get("/:id", verifyJwt, getNote);
 router.post("/", verifyJwt, createNotes);
 router.put("/:id", updateNote);
 router.delete("/:id", deleteNote);

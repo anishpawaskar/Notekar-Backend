@@ -39,8 +39,9 @@ export const getAllNotes = async (req, res) => {
 
 export const getNote = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const noteId = req.params.id;
-    const note = await getNoteModel({ _id: noteId });
+    const note = await getNoteModel({ _id: noteId, userId });
 
     if (!note) {
       return res.status(404).json({ message: "Note not found." });
