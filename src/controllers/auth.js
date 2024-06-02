@@ -22,7 +22,7 @@ export const registerUser = async (req, res) => {
     });
 
     if (newUser) {
-      const user = { firstName, lastName, email };
+      const user = { id: newUser._id, firstName, lastName, email };
       const token = generateJwt(user);
       console.log("token", token);
       res.cookie(process.env.COOKIE_NAME, token, { httpOnly: true });
