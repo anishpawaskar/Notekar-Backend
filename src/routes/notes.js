@@ -14,6 +14,6 @@ router.get("/", verifyJwt, getAllNotes);
 router.get("/:id", verifyJwt, getNote);
 router.post("/", verifyJwt, createNotes);
 router.put("/:id", verifyJwt, updateNote);
-router.delete("/:id", deleteNote);
+router.delete("/:id", verifyJwt, deleteNote);
 
 export default router;
