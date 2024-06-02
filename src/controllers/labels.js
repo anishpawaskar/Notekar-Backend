@@ -71,8 +71,12 @@ export const updteLabel = async (req, res) => {
 
 export const deleteLabel = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const labelId = req.params.id;
-    const deletedNote = await findLabelByIdAndDeleteModel({ _id: labelId });
+    const deletedNote = await findLabelByIdAndDeleteModel({
+      _id: labelId,
+      userId,
+    });
 
     if (!deletedNote) {
       return res.status(404).json({ message: "Label not found." });

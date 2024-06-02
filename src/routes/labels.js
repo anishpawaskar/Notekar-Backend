@@ -12,6 +12,6 @@ const router = express.Router();
 router.get("/", verifyJwt, getLabels);
 router.post("/", verifyJwt, createLabel);
 router.put("/:id", verifyJwt, updteLabel);
-router.delete("/:id", deleteLabel);
+router.delete("/:id", verifyJwt, deleteLabel);
 
 export default router;
