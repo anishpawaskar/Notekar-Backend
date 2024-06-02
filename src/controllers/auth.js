@@ -51,9 +51,13 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Wrong password!" });
     }
 
-    const matchPassowrd = compareHashPassword(password, user.hashPassword);
+    const matchPassowrd = await compareHashPassword(
+      password,
+      user.hashPassword
+    );
+
     if (!matchPassowrd) {
-      return res.status(401).json({ message: "Password is incorrect!" });
+      return res.status(401).json({ message: "Email or password is invalid." });
     }
 
     const payload = {
