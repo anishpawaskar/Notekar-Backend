@@ -9,8 +9,9 @@ import {
 
 export const createNotes = async (req, res) => {
   try {
+    const { id: userId } = req.userData;
     const payload = req.body;
-    const note = await createNewNoteModel(payload);
+    const note = await createNewNoteModel({ userId, ...payload });
 
     if (note) {
       return res.status(201).json({ message: "New note created.", note });

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const NotesSchema = new mongoose.Schema(
   {
+    userId: String,
     title: String,
     description: String,
     imageUrl: String,

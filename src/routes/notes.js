@@ -6,13 +6,13 @@ import {
   getNote,
   updateNote,
 } from "../controllers/notes.js";
-import { filterOutEmptyProperties } from "../middlewares/filterOutEmptyProperties.js";
+import { verifyJwt } from "../utils/auth.js";
 
 const router = express.Router();
 
 router.get("/", getAllNotes);
 router.get("/:id", getNote);
-router.post("/", createNotes);
+router.post("/", verifyJwt, createNotes);
 router.put("/:id", updateNote);
 router.delete("/:id", deleteNote);
 
