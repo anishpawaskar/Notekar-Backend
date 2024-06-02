@@ -10,7 +10,7 @@ export const compareHashPassword = async (password, hashPassword) => {
 };
 
 export const generateJwt = (payload) => {
-  const token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY, {
+  const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
     expiresIn: "5h",
   });
   return token;
@@ -24,9 +24,11 @@ export const verifyJwt = (req, res, next) => {
   }
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const userData = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.userData = userData;
     next();
   } catch (err) {
+    console.log(err);
     return res.status(401).json({ error: "Invalid token" });
   }
 };
