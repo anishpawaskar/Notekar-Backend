@@ -28,8 +28,9 @@ export const getAllNotes = async (req, res) => {
   try {
     const { id: userId } = req.userData;
     const { label: labelQuery, archive } = req.query;
+    console.log("labelquery", labelQuery);
 
-    const filter = { userId: userId };
+    const filter = { userId: userId, states: { isArchived: false } };
 
     if (!userId) {
       return res
@@ -39,7 +40,7 @@ export const getAllNotes = async (req, res) => {
 
     if (labelQuery) {
       const parseLabel = parseQueryParams(labelQuery);
-      const label = await getLabelModel({ name: parseLabel });
+      const label = await getLabelModel({ name: parseLabel, userId });
       if (label) {
         filter.labels = label._id;
       }
