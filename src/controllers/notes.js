@@ -28,7 +28,6 @@ export const getAllNotes = async (req, res) => {
   try {
     const { id: userId } = req.userData;
     const { label: labelQuery, archive } = req.query;
-    console.log("labelquery", labelQuery);
 
     const filter = { userId: userId, states: { isArchived: false } };
 
