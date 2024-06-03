@@ -31,9 +31,7 @@ export const createNewNoteModel = async (payload) => {
 };
 
 export const getAllNotesModel = async (filter) => {
-  const notes = await Notes.find(filter).populate("labels");
-
-  return notes;
+  return await Notes.find(filter).populate("labels");
 };
 
 export const getNoteModel = async (filter) => {
