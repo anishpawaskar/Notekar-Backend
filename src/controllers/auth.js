@@ -24,7 +24,11 @@ export const registerUser = async (req, res) => {
     if (newUser) {
       const user = { id: newUser._id, firstName, lastName, email };
       const token = generateJwt(user);
-      res.cookie(process.env.COOKIE_NAME, token, { httpOnly: true });
+      res.cookie(process.env.COOKIE_NAME, token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      });
 
       return res.status(201).json({
         message: "User register successfully.",
@@ -67,7 +71,11 @@ export const loginUser = async (req, res) => {
     };
 
     const token = generateJwt(payload);
-    res.cookie(process.env.COOKIE_NAME, token, { httpOnly: true });
+    res.cookie(process.env.COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
 
     if (user.pictureUrl) {
       return res.status(200).json({
@@ -89,7 +97,11 @@ export const loginUser = async (req, res) => {
 export const singOutUser = (req, res) => {
   try {
     const cookieName = process.env.COOKIE_NAME;
-    res.clearCookie(cookieName, { httpOnly: true });
+    res.clearCookie(cookieName, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
     res.status(200).json({ message: "User logout successfully." });
   } catch (err) {
     console.log("err", err);
