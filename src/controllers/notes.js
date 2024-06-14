@@ -1,3 +1,4 @@
+import { getLabelModel } from "../models/labels.js";
 import {
   createNewNoteModel,
   findNoteByIdAndDeleteModel,
@@ -6,6 +7,7 @@ import {
   getAllNotesModel,
   getNoteModel,
 } from "../models/notes.js";
+import { parseQueryParams } from "../utils/queryParser.js";
 
 export const createNotes = async (req, res) => {
   try {
@@ -25,21 +27,37 @@ export const createNotes = async (req, res) => {
 export const getAllNotes = async (req, res) => {
   try {
     const { id: userId } = req.userData;
-    if (userId) {
-      const notes = await getAllNotesModel({ userId });
-      if (notes) {
-        return res
-          .status(200)
-          .json({ message: "Notes returned successfully.", notes });
-      }
-    } else {
+    const { label: labelQuery, archive } = req.query;
+
+    const filter = { userId: userId, states: { isArchived: false } };
+
+    if (!userId) {
       return res
         .status(200)
         .json({ message: "Notes returned successfully.", notes: [] });
     }
+
+    if (labelQuery) {
+      const parseLabel = parseQueryParams(labelQuery);
+      const label = await getLabelModel({ name: parseLabel, userId });
+      if (label) {
+        filter.labels = label._id;
+      }
+    }
+
+    if (archive) {
+      filter.states = { isArchived: true };
+    }
+
+    const notes = await getAllNotesModel(filter);
+    if (notes) {
+      return res
+        .status(200)
+        .json({ message: "Notes returned successfully.", notes });
+    }
   } catch (err) {
     console.error(err);
-    return res.status(500).json("Internal server error!");
+    return res.status(500).json("Error while fetching all notes.");
   }
 };
 
