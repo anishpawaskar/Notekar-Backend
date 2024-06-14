@@ -85,3 +85,14 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const singOutUser = (req, res) => {
+  try {
+    const cookieName = process.env.COOKIE_NAME;
+    res.clearCookie(cookieName, { httpOnly: true });
+    res.status(200).json({ message: "User logout successfully." });
+  } catch (err) {
+    console.log("err", err);
+    res.status(500).json({ message: "Error while logging out user." });
+  }
+};
