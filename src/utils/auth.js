@@ -18,7 +18,6 @@ export const generateJwt = (payload) => {
 
 export const verifyJwt = (req, res, next) => {
   const token = req.cookies[process.env.COOKIE_NAME];
-  console.log("token", token);
 
   if (!token) {
     return res.status(401).json({ error: "Access denied" });
@@ -27,7 +26,6 @@ export const verifyJwt = (req, res, next) => {
   try {
     const userData = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.userData = userData;
-    console.log("user data", userData);
     next();
   } catch (err) {
     console.log(err);
