@@ -28,7 +28,7 @@ export const registerUser = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "None",
-        expires: 24 * 60 * 60 * 1000,
+        maxAge: 24 * 60 * 60 * 1000,
       });
 
       return res.status(201).json({
@@ -76,7 +76,7 @@ export const loginUser = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "None",
-      expires: 24 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     if (user.pictureUrl) {
