@@ -14,21 +14,13 @@ app.use(cookieParser());
 
 connectToDB();
 
-const allowedOrigins = ["http://localhost:5173", "https://notekar.netlify.app"];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: "https://notekar.netlify.app",
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.get("/", (req, res) => {
   return res.send("<h1>Hello World!</h1>");
