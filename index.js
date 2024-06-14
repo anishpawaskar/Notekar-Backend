@@ -22,6 +22,15 @@ app.use(
   })
 );
 
+app.options(
+  "*",
+  cors({
+    origin: "https://notekar.netlify.app",
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
+
 app.get("/", (req, res) => {
   return res.send("<h1>Hello World!</h1>");
 });
