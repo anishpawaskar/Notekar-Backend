@@ -16,7 +16,7 @@ connectToDB();
 
 app.use(
   cors({
-    origin: "https://notekar.netlify.app",
+    origin: process.env.PROD_URL,
     credentials: true,
     optionsSuccessStatus: 200,
   })
